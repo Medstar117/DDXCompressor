@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Threading.Tasks;
 
 namespace HWTextureCompressor
 {
@@ -29,7 +27,6 @@ namespace HWTextureCompressor
                     CopyDirectoryTree(directoryInfo, dest);
                     ParseDirectories(dest.FullName);
                 }
-
             }
             if (args.Length > 0 && File.Exists(args[0]))
             {
@@ -40,28 +37,20 @@ namespace HWTextureCompressor
 
         private static void CreateDDS(FileInfo file)
         {
-            try
-            {
-                File.Move(file.FullName, file.FullName.Replace(Path.GetExtension(file.FullName), ".dds"));
-                string path = file.FullName.Replace(Path.GetExtension(file.FullName), ".dds");
+            File.Move(file.FullName, file.FullName.Replace(Path.GetExtension(file.FullName), ".dds"));
+            string path = file.FullName.Replace(Path.GetExtension(file.FullName), ".dds");
 
-                Process proc = new Process();
-                proc.StartInfo.FileName = $"{Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)}/texconv.exe";
-                proc.StartInfo.UseShellExecute = true;
-                proc.EnableRaisingEvents = true;
+            Process proc = new Process();
+            proc.StartInfo.FileName = $"{Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)}/texconv.exe";
+            proc.StartInfo.UseShellExecute = true;
+            proc.EnableRaisingEvents = true;
 
-                proc.StartInfo.Arguments = $"{path} -w 256 -h 256 -ft dds -y -f DXT2";
+            proc.StartInfo.Arguments = $"{path} -w 256 -h 256 -ft dds -y -o {file.DirectoryName} -f DXT2";
 
-                proc.Start();
-                proc.WaitForExit();
+            proc.Start();
+            proc.WaitForExit();
 
-                File.Move(path, path.Replace(Path.GetExtension(path), ".ddx"));
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                Console.ReadKey();
-            }
+            File.Move(path, path.Replace(Path.GetExtension(path), ".ddx"));
         }
 
         private static void ProcessDirectory(DirectoryInfo directory)
