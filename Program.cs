@@ -42,10 +42,11 @@ namespace HWTextureCompressor
 
             Process proc = new Process();
             proc.StartInfo.FileName = $"{Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)}/texconv.exe";
+            proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             proc.StartInfo.UseShellExecute = true;
             proc.EnableRaisingEvents = true;
 
-            proc.StartInfo.Arguments = $"{path} -w 256 -h 256 -ft dds -y -o {file.DirectoryName} -f DXT2";
+            proc.StartInfo.Arguments = $"{path} -r -pow2 -ft dds -y -o {file.DirectoryName} -f DXT1";
 
             proc.Start();
             proc.WaitForExit();
