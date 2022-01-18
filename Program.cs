@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 
-namespace HWTextureCompressor
+namespace DDXTextureCompressor
 {
     internal class Program
     {
@@ -33,6 +33,8 @@ namespace HWTextureCompressor
                 FileInfo file = new FileInfo(args[0]);
                 CreateDDS(file);
             }
+
+            Console.Beep();
         }
 
         private static void CreateDDS(FileInfo file)

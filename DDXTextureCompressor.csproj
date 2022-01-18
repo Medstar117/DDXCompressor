@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{F0A5ABBA-9F67-4078-B4B9-72C84B55FED2}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>HWTextureCompressor</RootNamespace>
-    <AssemblyName>HWTextureCompressor</AssemblyName>
+    <RootNamespace>DDXTextureCompressor</RootNamespace>
+    <AssemblyName>DDXTextureCompressor</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -25,7 +25,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ProductName>DDXCompressor</ProductName>
+    <ProductName>DDXTextureCompressor</ProductName>
     <PublisherName>Half Dragon</PublisherName>
     <SuiteName>HD</SuiteName>
     <ApplicationRevision>1</ApplicationRevision>
@@ -56,7 +56,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>HWTextureCompressor.Program</StartupObject>
+    <StartupObject>DDXTextureCompressor.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestCertificateThumbprint>1405DBCB09030825A4E2637EBDEE3B19B53A5D79</ManifestCertificateThumbprint>
@@ -87,7 +87,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="HWTextureCompressor_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
