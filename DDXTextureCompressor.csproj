@@ -28,7 +28,7 @@
     <ProductName>DDXTextureCompressor</ProductName>
     <PublisherName>Half Dragon</PublisherName>
     <SuiteName>HD</SuiteName>
-    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationRevision>2</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>

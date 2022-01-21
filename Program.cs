@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace DDXTextureCompressor
@@ -63,6 +64,7 @@ namespace DDXTextureCompressor
                 proc.Start();
                 while (!proc.HasExited)
                 {
+                    Thread.Sleep(10);
                 }
 
                 File.Move(f, Path.ChangeExtension(f, ".ddx"));
