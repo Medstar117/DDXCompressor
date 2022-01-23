@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -13,6 +12,7 @@ namespace DDXTextureCompressor
         private static readonly List<Task> tasks = new List<Task>();
         private static readonly string[] SizeSuffixes =
                   { "bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
+
         private static void Main(string[] args)
         {
             Console.WriteLine("Please do not click this window while it's being used. \n");
@@ -39,37 +39,35 @@ namespace DDXTextureCompressor
             Console.ReadKey();
         }
 
-        private static void DisplayEndInfo(FileInfo oldfile, long newfile)
+        private static void DisplayEndInfo(FileInfo oldfile, FileInfo newfile)
         {
             long oldSize = oldfile.Length;
-            long newSize = newfile;
-            Console.WriteLine($"File optimization status: {oldfile} {SizeSuffix(oldSize)} > {SizeSuffix(newSize)}");
+            long newSize = newfile.Length;
+            Console.WriteLine($"File {oldfile.Name} optimization status: {SizeSuffix(oldSize)} > {SizeSuffix(newSize)}");
         }
 
         private static void CreateDDS(FileInfo file)
         {
             try
             {
-                DirectoryInfo dir = new DirectoryInfo(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location));
-
                 File.Move(file.FullName, Path.ChangeExtension(file.FullName, ".dds"));
                 string f = Path.ChangeExtension(file.FullName, ".dds");
-
                 Process proc = new Process();
                 proc.StartInfo.FileName = "texconv.exe";
                 proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
                 proc.EnableRaisingEvents = true;
-
-                proc.StartInfo.Arguments = $"{f} -r -pow2 -ft dds -y -o {file.DirectoryName} -nologo -f DXT1";
+                proc.StartInfo.UseShellExecute = true;
+                proc.StartInfo.Arguments = $"{f} -r:keep -pow2 -ft dds -y -o {file.DirectoryName} -gpu 0 -f DXT1 -dx9";
                 proc.Start();
+
                 while (!proc.HasExited)
                 {
                     Thread.Sleep(10);
                 }
 
+                FileInfo newFile = new FileInfo(file.FullName);
                 File.Move(f, Path.ChangeExtension(f, ".ddx"));
-                long newFileSize = f.Length;
-                DisplayEndInfo(file, newFileSize);
+                DisplayEndInfo(file, newFile);
             }
             catch (Exception ex)
             {
@@ -80,16 +78,19 @@ namespace DDXTextureCompressor
 
         private static void ProcessDirectory(DirectoryInfo directory)
         {
-            foreach (FileInfo file in directory.EnumerateFiles("*.ddx"))
+            if (directory.Name != "ui")
             {
-                tasks.Add(Task.Run(() => { CreateDDS(file); }));
+                foreach (FileInfo file in directory.EnumerateFiles("*.ddx"))
+                {
+                    tasks.Add(Task.Run(() => { CreateDDS(file); }));
+                }
+                Task t = Task.WhenAll(tasks);
+                try
+                {
+                    t.Wait();
+                }
+                catch { }
             }
-            Task t = Task.WhenAll(tasks);
-            try
-            {
-                t.Wait();
-            }
-            catch { }
         }
 
         private static void ParseDirectories(string root)
